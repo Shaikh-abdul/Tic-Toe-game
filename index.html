@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="msg-container hide">
+        <p id="msg">Winner</p>
+        <button id="new-btn">New Game</button>
+    </div>
+    <h1>Tic Tac Toe</h1>
+    <div class="container">
+        <div class="game">
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+
+        </div>
+    </div>
+    <button id="reset-btn">Reset game</button>
+
+
+
+</body>
+<script>
+    let boxes = document.querySelectorAll(".box");
+    let resetBtn = document.querySelector("#reset-btn");
+    let newGameBtn = document.querySelector("new-btn");
+    let msgcontainer = document.querySelector(".msg-container");
+    let msg = document.querySelector("#msg");
+
+
+    let turnO = true;
+    const winPatterns = [
+        [0, 1, 2],
+        [0, 3, 6],
+        [0, 4, 8],
+        [1, 4, 7],
+        [2, 4, 6],
+        [3, 4, 5],
+        [6, 7, 8],
+    ];
+
+    const resetGame = () => {
+        turnO = true;
+        enableBoxes();
+        msgcontainer.classList.add("hide");
+    };
+
+
+    boxes.forEach((box) => {
+        box.addEventListener("click", () => {
+            if (turnO) {
+                box.innerHTML = "O";
+                turnO = false;
+            } else {
+                box.innerHTML = "X";
+                turnO = true;
+            }
+            box.disabled = true;
+            checkWinner();
+        });
+    });
+
+    const disableBoxes = () => {
+        for (let box of boxes) {
+            box.disabled = true;
+        }
+    };
+
+    const enableBoxes = () => {
+        for (let box of boxes) {
+            box.disabled = false;
+            box.innerHTML = "";
+        }
+    };
+
+    const showWinner = (winner) => {
+        msg.innerText = `congratulations,winner is ${winner}`;
+        msgcontainer.classList.remove("hide");
+        disableBoxes();
+    };
+
+
+
+    const checkWinner = () => {
+        for (let Pattern of winPatterns) {
+            let pos1val = boxes[Pattern[0]].innerHTML;
+            let pos2val = boxes[Pattern[1]].innerHTML;
+            let pos3val = boxes[Pattern[2]].innerHTML;
+
+            if (pos1val != "" && pos2val != "" && pos3val != "") {
+                if (pos1val === pos2val && pos2val === pos3val) {
+                    showWinner(pos1val);
+                }
+            }
+        }
+    };
+
+    newGameBtn.addEventListener("click", resetGame);
+    resetBtn.addEventListener("click", resetGame);
+</script>
+
+</html>
